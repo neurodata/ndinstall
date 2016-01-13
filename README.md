@@ -1,2 +1,4 @@
 # OCPinstall
-Chef install files for OCP installation
+
+TODO: Enter the cookbook description here.
+
