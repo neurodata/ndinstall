@@ -15,7 +15,12 @@ package 'python-setuptools' do
   action :install
   options '--force-yes'
 end
+
 #Dependency for cffi/Cython
+package 'make' do
+  action :install
+end
+
 package 'libffi-dev' do
   action :install
 end
@@ -77,6 +82,10 @@ package 'nginx' do
 end
 
 package 'uwsgi' do
+  action :install
+end
+
+package 'uwsgi-plugin-python' do
   action :install
 end
 
@@ -193,6 +202,15 @@ pip_requirements '/tmp/open-connectome/setup/requirements.txt' do
   action :install
 end
 
+user 'neurodata' do
+  password "#{node['OCPinstall']['database']['userpass']}"
+end
+
+group 'neurodata' do
+  action :create
+  members 'neurodata'
+end
+
 #Directory operations
 directory '/var/log/ocp' do
   owner 'www-data'
@@ -215,3 +233,12 @@ git '/var/www/open-connectome' do
   revision 'ndio'
   action [:checkout, :sync]
 end.run_action(:checkout)
+
+#Remove upon change to microns
+bash 'makefile in ocplib' do
+  user 'root'
+  cwd '/var/www/open-connectome/ocplib'
+  code <<-EOH
+sudo make -f makefile_LINUX
+  EOH
+end

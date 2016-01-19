@@ -4,7 +4,7 @@ maintainer_email 'you@example.com'
 license 'all_rights'
 description 'Installs/Configures OCPinstall'
 long_description 'Installs/Configures OCPinstall'
-version '0.0.1'
+version '0.5.69'
 
 depends 'apt', '~> 2.9.2'
 depends 'mysql2_chef_gem', '~> 1.0.0'

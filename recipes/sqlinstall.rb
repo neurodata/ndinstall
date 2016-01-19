@@ -9,18 +9,15 @@ mysql2_chef_gem 'default' do
   action :install
 end
 
-# Install MySQL client.
-mysql_client 'default' do
-  action :create
+package 'mysql-server' do
+  action :install
 end
 
-# Load the password for root - probably an encrypted bag later
-
-# Configure the MySQL
-mysql_service 'default' do
-  initial_root_password node['OCPinstall']['database']['rootpass']
-  action [:create, :start]
-end
+mysql_connection_info = {
+  :host     => node['OCPinstall']['database']['localhost'],
+  :username => node['OCPinstall']['database']['username'],
+  :password => node['OCPinstall']['database']['userpass']
+}
 
 #Alternative to see if this works (please work)
 cookbook_file '/tmp/setupSQL.sql' do
@@ -30,6 +27,19 @@ cookbook_file '/tmp/setupSQL.sql' do
   mode '0600'
 end
 
-execute 'initialize database' do
-  command "mysql -h #{node['OCPinstall']['database']['localhost']} -u #{node['OCPinstall']['database']['rootname']} -p#{node['OCPinstall']['database']['rootpass']} < #{node['OCPinstall']['database']['setup_file']}"
+service "mysql" do
+  action :start
+end
+
+execute 'initialize neurodata user and flush root' do
+  command "mysql -u root -e \"flush privileges; \
+  create user '#{node['OCPinstall']['database']['username']}'@'localhost' identified by '#{node['OCPinstall']['database']['userpass']}'; \
+  grant all privileges on *.* to '#{node['OCPinstall']['database']['username']}'@'localhost' with grant option;
+  create user '#{node['OCPinstall']['database']['username']}'@'%' identified by '#{node['OCPinstall']['database']['userpass']}'; \
+  grant all privileges on *.* to '#{node['OCPinstall']['database']['username']}'@'%' with grant option;\""
+end
+
+mysql_database 'ocpdjango' do
+  connection mysql_connection_info
+  action :create
 end

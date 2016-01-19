@@ -1,7 +1,6 @@
-create user 'brain'@'localhost' identified by 'password_here';
-grant all privileges on *.* to 'brain'@'localhost' with grant option;
+flush privileges;
+create user 'brain'@'localhost' identified by 'neur0data';
+grant all privileges on *.* to 'neurodata'@'localhost' with grant option;
 
-create user 'brain'@'%' identified by 'password_here';
-grant all privileges on *.* to 'brain'@'%' with grant option;
-
-create database ocpdjango;
+create user 'neurodata'@'%' identified by 'neur0data';
+grant all privileges on *.* to 'neurodata'@'%' with grant option;
