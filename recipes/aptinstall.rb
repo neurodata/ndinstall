@@ -4,11 +4,10 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-python_runtime '2' do
-  pip_version '7.1.2'
-  setuptools_version '19.2'
-  wheel_version '0.26.0'
+package 'unzip' do
+  action :install
 end
+
 
 #Install packages
 package 'python-setuptools' do
@@ -16,6 +15,26 @@ package 'python-setuptools' do
   options '--force-yes'
 end
 
+bash 'makefile in ocplib' do
+  user 'root'
+  cwd '/tmp/'
+  code <<-EOH
+sudo python -m pip uninstall pip -y
+mkdir pip
+cd pip/
+wget https://github.com/pypa/pip/archive/7.1.2.zip
+unzip 7.1.2.zip
+cd pip-7.1.2
+sudo mkdir /usr/local/lib/python2.7/dist-packages/
+sudo python setup.py build
+sudo python setup.py install
+  EOH
+end
+"""
+python_runtime '2' do
+
+end
+"""
 #Dependency for cffi/Cython
 package 'make' do
   action :install
@@ -153,7 +172,13 @@ bash 'Pip ez_setup' do
   user 'root'
   cwd '/tmp/open-connectome/setup/'
   code <<-EOH
-  pip install ez_setup
+sudo mkdir /tmp/ez_setup
+cd /tmp/ez_setup
+sudo wget https://pypi.python.org/packages/source/e/ez_setup/ez_setup-0.9.tar.gz#md5=1ac53445a67bf68eb2676a72cc3f87f8
+sudo tar -xzf ez_setup-0.9.tar.gz
+cd ez_setup-0.9
+sudo python setup.py build
+sudo python setup.py install
   EOH
 end
 
@@ -165,7 +190,7 @@ python_package 'scipy' do
   user 'root'
 end
 
-python_package 'Fipy' do
+python_package 'fipy' do
   user 'root'
 end
 
@@ -202,6 +227,15 @@ pip_requirements '/tmp/open-connectome/setup/requirements.txt' do
   action :install
 end
 
+python_package 'django-registration' do
+  user 'root'
+  action :upgrade
+end
+
+python_package 'django-registration-redux' do
+  user 'root'
+end
+
 user 'neurodata' do
   password "#{node['OCPinstall']['database']['userpass']}"
 end
@@ -219,6 +253,12 @@ directory '/var/log/ocp' do
 end
 
 directory '/var/www' do
+  owner 'www-data'
+  group 'www-data'
+  action :create
+end.run_action(:create)
+
+directory '/var/log/celery' do
   owner 'www-data'
   group 'www-data'
   action :create
