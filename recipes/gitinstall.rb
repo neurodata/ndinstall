@@ -8,7 +8,6 @@ package 'git' do
   action :install
 end.run_action(:install)
 
-#For now hardcoded user ubuntu for aws
 git '/tmp/open-connectome' do
   repository 'git://github.com/openconnectome/open-connectome.git'
   revision 'ae-devel'
