@@ -19,7 +19,6 @@ mysql_connection_info = {
   :password => node['OCPinstall']['database']['userpass']
 }
 
-#Alternative to see if this works (please work)
 cookbook_file '/tmp/setupSQL.sql' do
   source 'setupSQL.sql'
   owner 'root'
