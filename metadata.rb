@@ -1,9 +1,9 @@
-name 'OCPinstall'
+name 'NDinstall'
 maintainer 'Alex Eusman'
 maintainer_email 'aeus@jhu.edu'
-license 'all_rights'
-description 'Installs/Configures OCPinstall'
-long_description 'Installs/Configures OCPinstall'
+license ''
+description 'Installs/Configures ND Servers'
+long_description 'Installs/Configures ND Servers'
 version '0.2.0'
 
 depends 'apt', '~> 2.9.2'
