@@ -4,15 +4,15 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
-file "/var/www/open-connectome/django/OCP/settings.py" do
+file "/var/www/ndstore/django/OCP/settings.py" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/django/OCP/settings.py.example").read
+  content ::File.open("/tmp/ndstore/django/OCP/settings.py.example").read
   action :create
 end
 
-file "/var/www/open-connectome/django/OCP/settings_secret.py" do
+file "/var/www/ndstore/django/OCP/settings_secret.py" do
   owner 'www-data'
   group 'www-data'
   mode 0755
@@ -28,7 +28,7 @@ file "/etc/nginx/sites-available/default" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/setup/ubuntu_config/nginx/default.nginx").read
+  content ::File.open("/tmp/ndstore/setup/ubuntu_config/nginx/default.nginx").read
   action :create
 end
 
@@ -41,7 +41,7 @@ file "/etc/uwsgi/apps-available/ocp.ini" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/setup/ubuntu_config/uwsgi/ocp.ini").read
+  content ::File.open("/tmp/ndstore/setup/ubuntu_config/uwsgi/ocp.ini").read
   action :create
 end
 
@@ -60,7 +60,7 @@ file "/etc/supervisor/conf.d/ingest.conf" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/setup/ubuntu_config/celery/ingest.conf").read
+  content ::File.open("/tmp/ndstore/setup/ubuntu_config/celery/ingest.conf").read
   action :create
 end
 
@@ -68,7 +68,7 @@ file "/etc/supervisor/conf.d/propagate.conf" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/setup/ubuntu_config/celery/propagate.conf").read
+  content ::File.open("/tmp/ndstore/setup/ubuntu_config/celery/propagate.conf").read
   action :create
 end
 
@@ -76,13 +76,13 @@ file "/etc/supervisor/conf.d/stats.conf" do
   owner 'www-data'
   group 'www-data'
   mode 0755
-  content ::File.open("/tmp/open-connectome/setup/ubuntu_config/celery/stats.conf").read
+  content ::File.open("/tmp/ndstore/setup/ubuntu_config/celery/stats.conf").read
   action :create
 end
 
 bash 'Migrate server' do
   user 'root'
-  cwd '/var/www/open-connectome/django'
+  cwd '/var/www/ndstore/django'
   code <<-EOH
 python manage.py migrate;
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('#{node['OCPinstall']['database']['username']}', 'brain@brain.brain', '#{node['OCPinstall']['database']['userpass']}')" | python manage.py shell;

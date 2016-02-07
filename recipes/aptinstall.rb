@@ -170,7 +170,7 @@ end
 
 bash 'Pip ez_setup' do
   user 'root'
-  cwd '/tmp/open-connectome/setup/'
+  cwd '/tmp/ndstore/setup/'
   code <<-EOH
 sudo mkdir /tmp/ez_setup
 cd /tmp/ez_setup
@@ -223,7 +223,7 @@ python_package 'lxml' do
 end
 
 #Install any remaining
-pip_requirements '/tmp/open-connectome/setup/requirements.txt' do
+pip_requirements '/tmp/ndstore/setup/requirements.txt' do
   action :install
 end
 
@@ -268,8 +268,8 @@ file '/var/log/ocp/ocp.log' do
   mode '0777'
 end
 
-git '/var/www/open-connectome' do
-  repository 'git://github.com/openconnectome/open-connectome.git'
+git '/var/www/ndstore' do
+  repository 'git://github.com/openconnectome/ndstore.git'
   revision 'ndio'
   action [:checkout, :sync]
 end.run_action(:checkout)
@@ -277,7 +277,7 @@ end.run_action(:checkout)
 #Remove upon change to microns
 bash 'makefile in ocplib' do
   user 'root'
-  cwd '/var/www/open-connectome/ocplib'
+  cwd '/var/www/ndstore/ocplib'
   code <<-EOH
 sudo make -f makefile_LINUX
   EOH

@@ -8,8 +8,8 @@ package 'git' do
   action :install
 end.run_action(:install)
 
-git '/tmp/open-connectome' do
-  repository 'git://github.com/openconnectome/open-connectome.git'
+git '/tmp/ndstore' do
+  repository 'git://github.com/openconnectome/ndstore.git'
   revision 'ae-devel'
   action [:checkout, :sync]
 end.run_action(:checkout)
