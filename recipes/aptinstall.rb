@@ -282,3 +282,15 @@ bash 'makefile in ocplib' do
 sudo make -f makefile_LINUX
   EOH
 end
+
+directory '/data' do
+  owner 'www-data'
+  group 'www-data'
+  action :create
+end.run_action(:create)
+
+directory '/data/scratch' do
+  owner 'www-data'
+  group 'www-data'
+  action :create
+end.run_action(:create)
